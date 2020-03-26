@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @RestController
@@ -17,10 +17,11 @@ public class AdminController {
     private AdminService adminService;
 
     @RequestMapping(value = "/admin/login", method = RequestMethod.POST)
-    public Response<?> adminLogin(HttpServletResponse response, @Valid AdminLoginReq req) {
+    public Response<?> adminLogin(HttpSession session, @Valid AdminLoginReq req) {
 
         if (adminService.checkLogin(req)) {
-            // 设置session
+            // 设置session中isLogin为true
+            session.setAttribute("isLogin", true);
             return Response.success();
         }
         return Response.fail("用户名或密码不匹配");
