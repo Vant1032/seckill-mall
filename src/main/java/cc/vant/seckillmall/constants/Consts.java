@@ -5,4 +5,8 @@ package cc.vant.seckillmall.constants;
  */
 public abstract class Consts {
 
+    // 用于Session中
+    public static final String IS_ADMIN_LOGIN = "isAdminLogin";
+
+    public static final String IS_USER_LOGIN = "isUserLogin";
 }

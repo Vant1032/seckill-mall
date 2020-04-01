@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.vant.seckillmall.mapper.GoodsMapper">
+  <resultMap id="BaseResultMap" type="cc.vant.seckillmall.model.Goods">
+    <!--@mbg.generated-->
+    <!--@Table goods-->
+    <id column="goods_id" jdbcType="INTEGER" property="goodsId" />
+    <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="amount" jdbcType="INTEGER" property="amount" />
+    <result column="desc_info" jdbcType="VARCHAR" property="descInfo" />
+    <result column="seckill_time" jdbcType="TIMESTAMP" property="seckillTime" />
+    <result column="img_url" jdbcType="VARCHAR" property="imgUrl" />
+    <result column="status" jdbcType="BIT" property="status" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    goods_id, goods_name, price, amount, desc_info, seckill_time, img_url, `status`, 
+    created_time, updated_time
+  </sql>
+</mapper>

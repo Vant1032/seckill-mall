@@ -1,8 +1,12 @@
 package cc.vant.seckillmall.service;
 
 import cc.vant.seckillmall.mapper.AdminUserMapper;
+import cc.vant.seckillmall.mapper.GoodsMapper;
 import cc.vant.seckillmall.model.AdminUser;
+import cc.vant.seckillmall.model.Goods;
 import cc.vant.seckillmall.pojo.admin.req.AdminLoginReq;
+import cc.vant.seckillmall.pojo.admin.req.CreateGoodsReq;
+import cc.vant.seckillmall.pojo.admin.req.DeleteGoodsReq;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +15,9 @@ import org.springframework.stereotype.Service;
 public class AdminService {
     @Autowired
     private AdminUserMapper adminUserMapper;
+
+    @Autowired
+    private GoodsMapper goodsMapper;
 
     public boolean checkLogin(AdminLoginReq req) {
         String userName = req.getUserName();
@@ -23,5 +30,20 @@ public class AdminService {
             return true;
         }
         return false;
+    }
+
+    public int createGoods(CreateGoodsReq req) {
+        Goods entity = new Goods();
+        entity.setGoodsName(req.getGoodsName());
+        entity.setPrice(req.getPrice());
+        entity.setAmount(req.getAmount());
+        entity.setDescInfo(req.getDescInfo());
+        entity.setSeckillTime(req.getSeckillTime());
+        entity.setImgUrl(req.getImgUrl());
+        return goodsMapper.insert(entity);
+    }
+
+    public void deleteGoods(DeleteGoodsReq req) {
+        goodsMapper.deleteById(req.getGoodsId());
     }
 }
