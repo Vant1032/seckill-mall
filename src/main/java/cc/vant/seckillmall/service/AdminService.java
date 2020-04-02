@@ -7,6 +7,7 @@ import cc.vant.seckillmall.model.Goods;
 import cc.vant.seckillmall.pojo.admin.req.AdminLoginReq;
 import cc.vant.seckillmall.pojo.admin.req.CreateGoodsReq;
 import cc.vant.seckillmall.pojo.admin.req.DeleteGoodsReq;
+import cc.vant.seckillmall.pojo.admin.req.ModifyGoodsReq;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,4 +47,10 @@ public class AdminService {
     public void deleteGoods(DeleteGoodsReq req) {
         goodsMapper.deleteById(req.getGoodsId());
     }
+
+    public void modifyGoods(ModifyGoodsReq req) {
+        Goods entity = req.toGoods();
+        goodsMapper.updateById(entity);
+    }
+
 }

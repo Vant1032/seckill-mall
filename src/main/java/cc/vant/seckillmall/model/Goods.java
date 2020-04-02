@@ -64,4 +64,5 @@ public class Goods {
 
     @TableField(value = "updated_time")
     private Date updatedTime;
+
 }

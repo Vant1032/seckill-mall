@@ -93,7 +93,7 @@ create table favorites
     fav_id       int primary key auto_increment,
     user_id      int      not null,
     goods_id     int      not null,
-    status       bit comment '0该收藏夹条目失效，1有效',
+    status       bit default 1 comment '0该收藏夹条目失效，1有效',
     created_time datetime not null default current_timestamp,
     updated_time datetime not null default current_timestamp on update current_timestamp
 ) comment '收藏夹';

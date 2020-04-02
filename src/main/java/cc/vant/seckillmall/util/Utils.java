@@ -1,6 +1,7 @@
 package cc.vant.seckillmall.util;
 
 import cc.vant.seckillmall.constants.Consts;
+import cc.vant.seckillmall.exception.NotLoginException;
 
 import javax.servlet.http.HttpSession;
 
@@ -9,13 +10,25 @@ import javax.servlet.http.HttpSession;
  */
 public abstract class Utils {
 
-    public static boolean userLogin(HttpSession session) {
+    private static boolean userLogin(HttpSession session) {
         Boolean attribute = (Boolean) session.getAttribute(Consts.IS_USER_LOGIN);
         return attribute != null && attribute;
     }
 
-    public static boolean adminLogin(HttpSession session) {
+    private static boolean adminLogin(HttpSession session) {
         Boolean attribute = (Boolean) session.getAttribute(Consts.IS_ADMIN_LOGIN);
         return attribute != null && attribute;
+    }
+
+    public static void adminLoginException(HttpSession session) {
+        if (!Utils.adminLogin(session)) {
+            throw new NotLoginException();
+        }
+    }
+
+    public static void userLoginException(HttpSession session) {
+        if (!Utils.userLogin(session)) {
+            throw new NotLoginException();
+        }
     }
 }
