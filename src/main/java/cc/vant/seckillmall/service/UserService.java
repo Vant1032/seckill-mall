@@ -22,7 +22,7 @@ public class UserService {
     @Autowired
     private FavoritesMapper favoritesMapper;
 
-    public boolean checkUserLogin(String userName, String password) {
+    public boolean isUserLogin(String userName, String password) {
         User entity = new User();
         entity.setUserName(userName);
         User user = userMapper.selectOne(Wrappers.query(entity));
@@ -44,7 +44,7 @@ public class UserService {
     /**
      * @return true 如果名字已存在
      */
-    public boolean checkNameExist(String name) {
+    public boolean isNameExist(String name) {
         User entity = new User();
         entity.setUserName(name);
         User user = userMapper.selectOne(Wrappers.query(entity));
@@ -59,7 +59,7 @@ public class UserService {
     /**
      * 检查商品是否已经加入到收藏夹了
      */
-    public boolean checkFavoritesGoodsExist(Integer goodsId) {
+    public boolean isFavoritesGoodsExist(Integer goodsId) {
         Favorites entity = new Favorites();
         entity.setGoodsId(goodsId);
         Favorites rst = favoritesMapper.selectOne(Wrappers.query(entity));
@@ -76,7 +76,7 @@ public class UserService {
         return rsp;
     }
 
-    public boolean checkFavoritesIdExist(Integer favId) {
+    public boolean isFavoritesIdExist(Integer favId) {
         Favorites favorites = favoritesMapper.selectById(favId);
         return favorites != null;
     }

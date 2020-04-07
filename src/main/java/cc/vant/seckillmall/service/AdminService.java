@@ -20,17 +20,14 @@ public class AdminService {
     @Autowired
     private GoodsMapper goodsMapper;
 
-    public boolean checkLogin(AdminLoginReq req) {
+    public boolean isLogin(AdminLoginReq req) {
         String userName = req.getUserName();
         String password = req.getPassword();
         AdminUser entity = new AdminUser();
         entity.setUserName(userName);
         AdminUser adminUser = adminUserMapper.selectOne(new QueryWrapper<>(entity));
-        if (adminUser != null && adminUser.getUserName().equals(userName)
-        && adminUser.getPassword().equals(password) && adminUser.getStatus()) {
-            return true;
-        }
-        return false;
+        return adminUser != null && adminUser.getUserName().equals(userName)
+                && adminUser.getPassword().equals(password) && adminUser.getStatus();
     }
 
     public int createGoods(CreateGoodsReq req) {

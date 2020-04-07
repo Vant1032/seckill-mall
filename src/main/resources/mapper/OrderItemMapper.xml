@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.vant.seckillmall.mapper.OrderItemMapper">
+  <resultMap id="BaseResultMap" type="cc.vant.seckillmall.model.OrderItem">
+    <!--@mbg.generated-->
+    <!--@Table order_item-->
+    <id column="order_item_id" jdbcType="INTEGER" property="orderItemId" />
+    <result column="order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="goods_id" jdbcType="INTEGER" property="goodsId" />
+    <result column="amount" jdbcType="INTEGER" property="amount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    order_item_id, order_id, goods_id, amount, created_time, updated_time
+  </sql>
+</mapper>
