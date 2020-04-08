@@ -33,7 +33,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo(){
         return new ApiInfoBuilder()
                 .title("秒杀商城")
-                .contact(new Contact("Vant", null, "forvant@qq.com"))
+                .contact(new Contact("Vant", "https://www.vant.cc", "forvant@qq.com"))
                 .version("1.0.0")
                 .description("秒杀商城文档")
                 .build();
