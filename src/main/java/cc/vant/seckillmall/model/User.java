@@ -9,8 +9,8 @@ import lombok.Data;
 import java.util.Date;
 
 /**
-    * 用户账户信息表
-    */
+ * 用户账户信息表
+ */
 @Data
 @TableName(value = "`user`")
 public class User {

@@ -20,6 +20,7 @@ import javax.validation.Valid;
 
 @Api("商家才可以用的功能")
 @RestController
+@RequestMapping("/api")
 public class AdminController extends BaseController {
     @Autowired
     private AdminService adminService;

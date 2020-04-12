@@ -17,7 +17,7 @@ import javax.validation.Valid;
 
 
 @Api("跟用户相关的")
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 @RestController
 public class UserController extends BaseController {
 
