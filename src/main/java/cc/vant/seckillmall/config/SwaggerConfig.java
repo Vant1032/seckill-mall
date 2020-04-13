@@ -27,7 +27,6 @@ public class SwaggerConfig {
                 .paths(PathSelectors.any())
                 .build();
         return docket;
-
     }
 
     private ApiInfo apiInfo(){

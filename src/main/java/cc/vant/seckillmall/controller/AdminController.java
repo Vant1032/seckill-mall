@@ -48,7 +48,7 @@ public class AdminController extends BaseController {
     @ApiOperation("商家创建秒杀商品")
     @RequestMapping(value = "/admin/createGoods", method = RequestMethod.POST)
     public Response<?> createGoods(@Valid CreateGoodsReq req) {
-        Utils.adminLoginException(session);
+        Utils.adminLoginCheck(session);
 
         int goodsId = adminService.createGoods(req);
 
@@ -60,7 +60,7 @@ public class AdminController extends BaseController {
     @ApiOperation("商家根据goodId删除商品")
     @RequestMapping(value = "/admin/deleteGoods", method = RequestMethod.POST)
     public Response<?> deleteGoods(@Valid DeleteGoodsReq req) {
-        Utils.adminLoginException(session);
+        Utils.adminLoginCheck(session);
 
         adminService.deleteGoods(req);
         return Response.success();
@@ -69,7 +69,7 @@ public class AdminController extends BaseController {
     @ApiOperation("商家修改商品")
     @RequestMapping(value = "/admin/modifyGoods", method = RequestMethod.POST)
     public Response<?> modifyGoods(@Valid ModifyGoodsReq req) {
-        Utils.adminLoginException(session);
+        Utils.adminLoginCheck(session);
 
         adminService.modifyGoods(req);
         return Response.success();

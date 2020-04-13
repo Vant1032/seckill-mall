@@ -28,7 +28,7 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Response<?> userLogin(@Valid UserLoginReq req) {
         if (userService.isUserLogin(req.getUserName(), req.getPassword())) {
-            session.setAttribute(Consts.IS_USER_LOGIN, true);
+            session.setAttribute(Consts.IS_USER_LOGIN, Boolean.TRUE);
             return Response.success();
         }
         return Response.fail("用户名或密码不匹配");
@@ -55,7 +55,7 @@ public class UserController extends BaseController {
     @ApiOperation("修改密码")
     @RequestMapping(value = "/changePassword", method = RequestMethod.POST)
     public Response<?> userChangePassword(@Valid UserChangePasswordReq req) {
-        Utils.adminLoginException(session);
+        Utils.adminLoginCheck(session);
 
         return userService.userChangePassword(req);
     }
@@ -63,7 +63,7 @@ public class UserController extends BaseController {
     @ApiOperation("修改用户信息")
     @RequestMapping(value = "/changeUserInfo", method = RequestMethod.POST)
     public Response<?> changeUserInfo(@Valid ChangeUserInfoReq req) {
-        Utils.adminLoginException(session);
+        Utils.adminLoginCheck(session);
 
 
         // todo
@@ -74,7 +74,7 @@ public class UserController extends BaseController {
     @ApiOperation(value = "查看收藏夹", notes = "会分页")
     @RequestMapping(value = "/viewFavorites", method = RequestMethod.GET)
     public Response<?> viewFavorites(@Valid ViewFavoritesReq req) {
-        Utils.adminLoginException(session);
+        Utils.adminLoginCheck(session);
 
         ViewFavoritesRsp rsp = userService.viewFavorites(req);
         // todo分页
@@ -84,7 +84,7 @@ public class UserController extends BaseController {
     @ApiOperation("添加商品到收藏夹")
     @RequestMapping(value = "/addToFavorites", method = RequestMethod.POST)
     public Response<?> addToFavorites(@Valid AddToFavoritesReq req) {
-        Utils.adminLoginException(session);
+        Utils.adminLoginCheck(session);
 
         // 检查是否已存在
         if (userService.isFavoritesGoodsExist(req.getGoodsId())) {
@@ -97,7 +97,7 @@ public class UserController extends BaseController {
     @ApiOperation("删除收藏夹中的商品")
     @RequestMapping(value = "/deleteFavorites", method = RequestMethod.POST)
     public Response<?> deleteFavorites(@Valid DeleteFavoritesReq req) {
-        Utils.adminLoginException(session);
+        Utils.adminLoginCheck(session);
 
         if (!userService.isFavoritesIdExist(req.getFavId())) {
             return Response.fail("请求参数错误");

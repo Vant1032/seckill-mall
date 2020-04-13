@@ -20,13 +20,13 @@ public abstract class Utils {
         return attribute != null && attribute;
     }
 
-    public static void adminLoginException(HttpSession session) {
+    public static void adminLoginCheck(HttpSession session) {
         if (!Utils.adminLogin(session)) {
             throw new NotLoginException();
         }
     }
 
-    public static void userLoginException(HttpSession session) {
+    public static void userLoginCheck(HttpSession session) {
         if (!Utils.userLogin(session)) {
             throw new NotLoginException();
         }

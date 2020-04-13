@@ -10,14 +10,18 @@
     <result column="amount" jdbcType="INTEGER" property="amount" />
     <result column="desc_info" jdbcType="VARCHAR" property="descInfo" />
     <result column="seckill_time" jdbcType="TIMESTAMP" property="seckillTime" />
-    <result column="img_url" jdbcType="VARCHAR" property="imgUrl" />
-    <result column="status" jdbcType="BIT" property="status" />
-    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
-    <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+      <result column="img_url" jdbcType="VARCHAR" property="imgUrl"/>
+      <result column="status" jdbcType="BIT" property="status"/>
+      <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+      <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
   </resultMap>
   <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    goods_id, goods_name, price, amount, desc_info, seckill_time, img_url, `status`, 
-    created_time, updated_time
+      <!--@mbg.generated-->
+      goods_id, goods_name, price, amount, desc_info, seckill_time, img_url, `status`,
+      created_time, updated_time
   </sql>
+  <select id="getGoodsList" resultMap="BaseResultMap">
+    select goods_id, goods_name, price, amount, desc_info, seckill_time, img_url, status
+    from goods where seckill_time >= #{startTime} and seckill_time <![CDATA[ < ]]> #{endTime}
+  </select>
 </mapper>

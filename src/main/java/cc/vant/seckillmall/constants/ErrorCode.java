@@ -4,7 +4,9 @@ package cc.vant.seckillmall.constants;
  * 所有的错误码都将放在这里
  */
 public enum  ErrorCode {
-    ERROR(1, "");
+    ERROR(1, ""),
+    NOT_LOGIN(2, "没有登录")
+    ;
 
     private int code;
 
