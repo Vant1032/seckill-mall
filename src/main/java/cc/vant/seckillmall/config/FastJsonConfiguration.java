@@ -25,7 +25,8 @@ public class FastJsonConfiguration {
 		fastJsonConfig.setSerializeConfig(serializeConfig);
 
 		fastJsonConfig.setSerializerFeatures(
-                SerializerFeature.DisableCircularReferenceDetect
+                SerializerFeature.DisableCircularReferenceDetect,
+                SerializerFeature.WriteDateUseDateFormat
         );
         fastJsonConfig.setCharset(StandardCharsets.UTF_8);
         fastConverter.setFastJsonConfig(fastJsonConfig);

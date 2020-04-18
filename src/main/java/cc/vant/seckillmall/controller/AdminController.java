@@ -1,29 +1,40 @@
 package cc.vant.seckillmall.controller;
 
 import cc.vant.seckillmall.constants.Consts;
-import cc.vant.seckillmall.pojo.admin.req.AdminLoginReq;
-import cc.vant.seckillmall.pojo.admin.req.CreateGoodsReq;
-import cc.vant.seckillmall.pojo.admin.req.DeleteGoodsReq;
-import cc.vant.seckillmall.pojo.admin.req.ModifyGoodsReq;
+import cc.vant.seckillmall.constants.Props;
+import cc.vant.seckillmall.pojo.admin.req.*;
 import cc.vant.seckillmall.pojo.admin.rsp.CreateGoodsRsp;
+import cc.vant.seckillmall.pojo.admin.rsp.UploadImageRsp;
 import cc.vant.seckillmall.service.AdminService;
 import cc.vant.seckillmall.util.Response;
 import cc.vant.seckillmall.util.Utils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.UUID;
 
 @Api("商家才可以用的功能")
 @RestController
 @RequestMapping("/api")
 public class AdminController extends BaseController {
+
+    private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
+
     @Autowired
     private AdminService adminService;
+
+    @Autowired
+    private Props props;
 
     @ApiOperation("商家登录")
     @RequestMapping(value = "/admin/login", method = RequestMethod.POST)
@@ -32,6 +43,8 @@ public class AdminController extends BaseController {
         if (adminService.isLogin(req)) {
             // 设置session中isLogin为true
             session.setAttribute(Consts.IS_ADMIN_LOGIN, true);
+            session.setAttribute(Consts.IS_USER_LOGIN, true);
+
             return Response.success();
         }
         return Response.fail("用户名或密码不匹配");
@@ -42,6 +55,7 @@ public class AdminController extends BaseController {
     @RequestMapping(value = "/admin/loginOut", method = RequestMethod.POST)
     public Response<?> loginOut() {
         session.setAttribute(Consts.IS_ADMIN_LOGIN, false);
+        session.setAttribute(Consts.IS_USER_LOGIN, false);
         return Response.success();
     }
 
@@ -73,5 +87,24 @@ public class AdminController extends BaseController {
 
         adminService.modifyGoods(req);
         return Response.success();
+    }
+
+    @ApiOperation("上传图片")
+    @RequestMapping(value = "/admin/uploadImg", method = RequestMethod.POST)
+    public Response<?> uploadImage(@Valid UploadImageReq req) {
+        Utils.adminLoginCheck(session);
+
+        String imageName = UUID.randomUUID().toString() + ".jpg";
+        Path imagePath = Path.of(props.getImgBasePath(), imageName);
+        MultipartFile file = req.getFile();
+        try {
+            file.transferTo(imagePath);
+        } catch (IOException e) {
+            logger.warn("无法存储上传的图片到本地", e);
+            return Response.fail("上传图片失败");
+        }
+        UploadImageRsp rsp = new UploadImageRsp();
+        rsp.setImageName(imageName);
+        return Response.success(rsp);
     }
 }
