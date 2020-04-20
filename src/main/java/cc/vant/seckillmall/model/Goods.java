@@ -50,8 +50,8 @@ public class Goods {
     /**
      * 商品图片url地址
      */
-    @TableField(value = "img_url")
-    private String imgUrl;
+    @TableField(value = "img_name")
+    private String imgName;
 
     /**
      * 0下架，1上架

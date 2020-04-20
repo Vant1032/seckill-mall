@@ -40,7 +40,7 @@ create table goods
     amount       int          not null comment '数量',
     desc_info    varchar(100) not null default '' comment '商品描述信息',
     seckill_time datetime     not null comment '秒杀时间',
-    img_url      varchar(60)  not null comment '商品图片url地址',
+    img_name      varchar(60)  not null comment '商品图片名称',
     status       bit comment '0下架，1上架',
     created_time datetime     not null default current_timestamp,
     updated_time datetime     not null default current_timestamp on update current_timestamp,

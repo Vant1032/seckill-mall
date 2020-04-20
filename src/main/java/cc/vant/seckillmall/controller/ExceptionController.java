@@ -3,6 +3,8 @@ package cc.vant.seckillmall.controller;
 import cc.vant.seckillmall.constants.ErrorCode;
 import cc.vant.seckillmall.exception.NotLoginException;
 import cc.vant.seckillmall.util.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,6 +17,8 @@ import java.util.List;
 @RestController
 @ControllerAdvice
 public class ExceptionController {
+    private static final Logger logger = LoggerFactory.getLogger(ExceptionController.class);
+
 
     @ExceptionHandler({InvalidParameterException.class})
     public Response<?> invalidParam(InvalidParameterException e) {
@@ -42,6 +46,7 @@ public class ExceptionController {
 
     @ExceptionHandler({Exception.class})
     public Response<?> exceptionHandle(Exception e) {
+        logger.error("发生全局异常：", e);
         return Response.fail("服务繁忙");
     }
 }

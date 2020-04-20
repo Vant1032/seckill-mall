@@ -29,5 +29,5 @@ public class CreateGoodsReq {
     private Date seckillTime;
 
     @NotBlank
-    private String imgUrl;
+    private String imgName;
 }

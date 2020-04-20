@@ -2,6 +2,7 @@ package cc.vant.seckillmall.controller;
 
 import cc.vant.seckillmall.constants.Consts;
 import cc.vant.seckillmall.constants.Props;
+import cc.vant.seckillmall.model.Goods;
 import cc.vant.seckillmall.pojo.admin.req.*;
 import cc.vant.seckillmall.pojo.admin.rsp.CreateGoodsRsp;
 import cc.vant.seckillmall.pojo.admin.rsp.UploadImageRsp;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.UUID;
 
 @Api("商家才可以用的功能")
@@ -50,6 +52,12 @@ public class AdminController extends BaseController {
         return Response.fail("用户名或密码不匹配");
     }
 
+    @ApiOperation(value = "检查商家是否登录")
+    @RequestMapping(value = "/admin/getLoginStatus", method = RequestMethod.POST)
+    public Response<?> getAdminLoginStatus() {
+        Utils.adminLoginCheck(session);
+        return Response.success();
+    }
 
     @ApiOperation("商家退出的登录")
     @RequestMapping(value = "/admin/loginOut", method = RequestMethod.POST)
@@ -89,6 +97,15 @@ public class AdminController extends BaseController {
         return Response.success();
     }
 
+    @ApiOperation("商家查看所有已创建的商品")
+    @RequestMapping(value = "/admin/getAllGoods", method = RequestMethod.POST)
+    public Response<?> getAllGoods() {
+        Utils.adminLoginCheck(session);
+
+        List<Goods> allGoods = adminService.getAllGoods();
+        return Response.success(allGoods);
+    }
+
     @ApiOperation("上传图片")
     @RequestMapping(value = "/admin/uploadImg", method = RequestMethod.POST)
     public Response<?> uploadImage(@Valid UploadImageReq req) {
@@ -97,6 +114,9 @@ public class AdminController extends BaseController {
         String imageName = UUID.randomUUID().toString() + ".jpg";
         Path imagePath = Path.of(props.getImgBasePath(), imageName);
         MultipartFile file = req.getFile();
+        if (file == null) {
+            return Response.fail("没有图片被上传");
+        }
         try {
             file.transferTo(imagePath);
         } catch (IOException e) {

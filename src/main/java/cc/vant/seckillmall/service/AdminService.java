@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 @Service
 public class AdminService {
@@ -50,14 +51,14 @@ public class AdminService {
         entity.setAmount(req.getAmount());
         entity.setDescInfo(req.getDescInfo());
         entity.setSeckillTime(req.getSeckillTime());
-        entity.setImgUrl(req.getImgUrl());
+        entity.setImgName(req.getImgName());
         return goodsMapper.insert(entity);
     }
 
     public void deleteGoods(DeleteGoodsReq req) {
         Goods goods = goodsMapper.selectById(req.getGoodsId());
         if (goods != null) {
-            Path path = Paths.get(props.getImgBasePath(), goods.getImgUrl());
+            Path path = Paths.get(props.getImgBasePath(), goods.getImgName());
             try {
                 Files.delete(path);
             } catch (IOException e) {
@@ -72,4 +73,7 @@ public class AdminService {
         goodsMapper.updateById(entity);
     }
 
+    public List<Goods> getAllGoods() {
+        return goodsMapper.selectList(null);
+    }
 }

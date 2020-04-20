@@ -9,4 +9,6 @@ public abstract class Consts {
     public static final String IS_ADMIN_LOGIN = "isAdminLogin";
 
     public static final String IS_USER_LOGIN = "isUserLogin";
+
+    public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 }

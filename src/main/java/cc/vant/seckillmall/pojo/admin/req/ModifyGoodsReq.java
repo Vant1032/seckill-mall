@@ -1,9 +1,12 @@
 package cc.vant.seckillmall.pojo.admin.req;
 
+import cc.vant.seckillmall.constants.Consts;
 import cc.vant.seckillmall.model.Goods;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -21,9 +24,11 @@ public class ModifyGoodsReq {
 
     private String descInfo;
 
+    @DateTimeFormat(pattern = Consts.DATE_TIME_FORMAT)
     private Date seckillTime;
 
-    private String imgUrl;
+    @NotEmpty
+    private String imgName;
 
     private Boolean status;
 
@@ -36,7 +41,7 @@ public class ModifyGoodsReq {
         goods.setAmount(this.amount);
         goods.setDescInfo(this.descInfo);
         goods.setSeckillTime(this.seckillTime);
-        goods.setImgUrl(this.imgUrl);
+        goods.setImgName(this.imgName);
         goods.setStatus(this.status);
 
         // Not mapped Goods fields:

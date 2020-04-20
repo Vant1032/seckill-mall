@@ -41,6 +41,13 @@ public class UserController extends BaseController {
         return Response.success();
     }
 
+    @ApiOperation(value = "检查用户是否登录")
+    @RequestMapping(value = "/getLoginStatus", method = RequestMethod.POST)
+    public Response<?> getAdminLoginStatus() {
+        Utils.userLoginCheck(session);
+        return Response.success();
+    }
+
     @ApiOperation("用户注册")
     @RequestMapping(value = "/signIn", method = RequestMethod.POST)
     public Response<?> userSignIn(@Valid UserSignInReq req) {
