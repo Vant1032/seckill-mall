@@ -118,4 +118,11 @@ public class UserService {
         receiveAddress.setUserId(userId);
         return receiveAddressMapper.selectList(new QueryWrapper<>(receiveAddress));
     }
+
+    public void deleteReceiveAddress(Integer userId, Integer addrId) {
+        ReceiveAddress receiveAddress = new ReceiveAddress();
+        receiveAddress.setUserId(userId);
+        receiveAddress.setAddrId(addrId);
+        receiveAddressMapper.delete(new QueryWrapper<>(receiveAddress));
+    }
 }

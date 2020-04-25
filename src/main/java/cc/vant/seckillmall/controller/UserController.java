@@ -136,4 +136,14 @@ public class UserController extends BaseController {
         Integer userId = (Integer) session.getAttribute(Consts.USER_ID);
         return Response.success(userService.getAllReceiveAddress(userId));
     }
+
+    @ApiOperation("买家删除收货地址")
+    @RequestMapping(value = "/deleteReceiveAddress", method = RequestMethod.POST)
+    public Response<?> deleteReceiveAddress(@Valid DeleteReceiveAddressReq req) {
+        Utils.userLoginCheck(session);
+
+        Integer userId = (Integer) session.getAttribute(Consts.USER_ID);
+        userService.deleteReceiveAddress(userId, req.getAddrId());
+        return Response.success();
+    }
 }
