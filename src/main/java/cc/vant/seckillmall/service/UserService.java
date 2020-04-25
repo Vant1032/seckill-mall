@@ -1,13 +1,17 @@
 package cc.vant.seckillmall.service;
 
 import cc.vant.seckillmall.mapper.FavoritesMapper;
+import cc.vant.seckillmall.mapper.ReceiveAddressMapper;
 import cc.vant.seckillmall.mapper.UserMapper;
 import cc.vant.seckillmall.model.Favorites;
+import cc.vant.seckillmall.model.ReceiveAddress;
 import cc.vant.seckillmall.model.User;
 import cc.vant.seckillmall.pojo.user.req.*;
 import cc.vant.seckillmall.pojo.user.rsp.ViewFavoritesRsp;
 import cc.vant.seckillmall.util.Response;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,14 +26,13 @@ public class UserService {
     @Autowired
     private FavoritesMapper favoritesMapper;
 
-    public boolean isUserLogin(String userName, String password) {
+    @Autowired
+    private ReceiveAddressMapper receiveAddressMapper;
+
+    public User getUserByUserName(String userName) {
         User entity = new User();
         entity.setUserName(userName);
-        User user = userMapper.selectOne(Wrappers.query(entity));
-        if (password.equals(user.getPassword()) && user.getStatus()) {
-            return true;
-        }
-        return false;
+        return userMapper.selectOne(Wrappers.query(entity));
     }
 
     public void userSignIn(UserSignInReq req) {
@@ -98,5 +101,21 @@ public class UserService {
             return Response.success();
         }
         return Response.fail("密码错误");
+    }
+
+    public void createReceiveAddress(CreateReceiveAddressReq req, Integer userId) {
+        Boolean defaultAddr = ObjectUtils.defaultIfNull(req.getDefaultAddr(), Boolean.FALSE);
+        if (defaultAddr) {
+            receiveAddressMapper.clearDefaultAddr(userId);
+        }
+        ReceiveAddress receiveAddress = req.toReceiveAddress();
+        receiveAddress.setUserId(userId);
+        receiveAddressMapper.insert(receiveAddress);
+    }
+
+    public List<ReceiveAddress> getAllReceiveAddress(Integer userId) {
+        ReceiveAddress receiveAddress = new ReceiveAddress();
+        receiveAddress.setUserId(userId);
+        return receiveAddressMapper.selectList(new QueryWrapper<>(receiveAddress));
     }
 }

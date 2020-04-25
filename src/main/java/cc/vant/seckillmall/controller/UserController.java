@@ -1,6 +1,7 @@
 package cc.vant.seckillmall.controller;
 
 import cc.vant.seckillmall.constants.Consts;
+import cc.vant.seckillmall.model.User;
 import cc.vant.seckillmall.pojo.user.req.*;
 import cc.vant.seckillmall.pojo.user.rsp.ViewFavoritesRsp;
 import cc.vant.seckillmall.service.UserService;
@@ -27,7 +28,9 @@ public class UserController extends BaseController {
     @ApiOperation("用户登录")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Response<?> userLogin(@Valid UserLoginReq req) {
-        if (userService.isUserLogin(req.getUserName(), req.getPassword())) {
+        User user = userService.getUserByUserName(req.getUserName());
+        if (user != null && req.getUserName().equals(user.getUserName()) && req.getPassword().equals(user.getPassword())) {
+            session.setAttribute(Consts.USER_ID, user.getUserId());
             session.setAttribute(Consts.IS_USER_LOGIN, Boolean.TRUE);
             return Response.success();
         }
@@ -37,7 +40,8 @@ public class UserController extends BaseController {
     @ApiOperation("用户退出登录")
     @RequestMapping(value = "/loginOut", method = RequestMethod.POST)
     public Response<?> loginOut() {
-        session.setAttribute(Consts.IS_USER_LOGIN, false);
+        session.removeAttribute(Consts.USER_ID);
+        session.removeAttribute(Consts.IS_USER_LOGIN);
         return Response.success();
     }
 
@@ -81,7 +85,7 @@ public class UserController extends BaseController {
     @ApiOperation(value = "查看收藏夹", notes = "会分页")
     @RequestMapping(value = "/viewFavorites", method = RequestMethod.GET)
     public Response<?> viewFavorites(@Valid ViewFavoritesReq req) {
-        Utils.adminLoginCheck(session);
+        Utils.userLoginCheck(session);
 
         ViewFavoritesRsp rsp = userService.viewFavorites(req);
         // todo分页
@@ -91,7 +95,7 @@ public class UserController extends BaseController {
     @ApiOperation("添加商品到收藏夹")
     @RequestMapping(value = "/addToFavorites", method = RequestMethod.POST)
     public Response<?> addToFavorites(@Valid AddToFavoritesReq req) {
-        Utils.adminLoginCheck(session);
+        Utils.userLoginCheck(session);
 
         // 检查是否已存在
         if (userService.isFavoritesGoodsExist(req.getGoodsId())) {
@@ -104,7 +108,7 @@ public class UserController extends BaseController {
     @ApiOperation("删除收藏夹中的商品")
     @RequestMapping(value = "/deleteFavorites", method = RequestMethod.POST)
     public Response<?> deleteFavorites(@Valid DeleteFavoritesReq req) {
-        Utils.adminLoginCheck(session);
+        Utils.userLoginCheck(session);
 
         if (!userService.isFavoritesIdExist(req.getFavId())) {
             return Response.fail("请求参数错误");
@@ -113,5 +117,23 @@ public class UserController extends BaseController {
         return Response.success();
     }
 
+    @ApiOperation("买家增加收货地址")
+    @RequestMapping(value = "/createReceiveAddress", method = RequestMethod.POST)
+    public Response<?> createReceiveAddress(@Valid CreateReceiveAddressReq req) {
+        Utils.userLoginCheck(session);
 
+        Integer userId = (Integer) session.getAttribute(Consts.USER_ID);
+        userService.createReceiveAddress(req, userId);
+
+        return Response.success();
+    }
+
+    @ApiOperation("查找买家所有的收货地址")
+    @RequestMapping(value = "/getAllReceiveAddress", method = RequestMethod.POST)
+    public Response<?> getAllReceiveAddress(@Valid GetAllReceiveAddressReq req) {
+        Utils.userLoginCheck(session);
+
+        Integer userId = (Integer) session.getAttribute(Consts.USER_ID);
+        return Response.success(userService.getAllReceiveAddress(userId));
+    }
 }

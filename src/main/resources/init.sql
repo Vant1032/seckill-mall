@@ -47,8 +47,8 @@ create table goods
     key `idx_good_name` (goods_name) using btree
 ) comment '商品信息表';
 
-drop table if exists receive_addr;
-create table receive_addr
+drop table if exists receive_address;
+create table receive_address
 (
     addr_id       int primary key auto_increment,
     user_id       int         not null comment '这个收货地址属于哪个用户',
