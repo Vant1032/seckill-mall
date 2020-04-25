@@ -1,26 +1,39 @@
 package cc.vant.seckillmall.controller;
 
 import cc.vant.seckillmall.constants.Consts;
+import cc.vant.seckillmall.constants.Props;
 import cc.vant.seckillmall.model.User;
 import cc.vant.seckillmall.pojo.user.req.*;
+import cc.vant.seckillmall.pojo.user.rsp.GetUserAvatarRsp;
+import cc.vant.seckillmall.pojo.user.rsp.ModifyUserAvatarRsp;
 import cc.vant.seckillmall.pojo.user.rsp.ViewFavoritesRsp;
 import cc.vant.seckillmall.service.UserService;
 import cc.vant.seckillmall.util.Response;
 import cc.vant.seckillmall.util.Utils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.UUID;
 
 
 @Api("跟用户相关的")
 @RequestMapping("/api/user")
 @RestController
 public class UserController extends BaseController {
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
+    @Autowired
+    private Props props;
 
     @Autowired
     private UserService userService;
@@ -66,7 +79,7 @@ public class UserController extends BaseController {
     @ApiOperation("修改密码")
     @RequestMapping(value = "/changePassword", method = RequestMethod.POST)
     public Response<?> userChangePassword(@Valid UserChangePasswordReq req) {
-        Utils.adminLoginCheck(session);
+        Utils.userLoginCheck(session);
 
         return userService.userChangePassword(req);
     }
@@ -74,11 +87,47 @@ public class UserController extends BaseController {
     @ApiOperation("修改用户信息")
     @RequestMapping(value = "/changeUserInfo", method = RequestMethod.POST)
     public Response<?> changeUserInfo(@Valid ChangeUserInfoReq req) {
-        Utils.adminLoginCheck(session);
+        Utils.userLoginCheck(session);
 
 
         // todo
         return null;
+    }
+
+    @ApiOperation("获取用户头像图片名")
+    @RequestMapping(value = "/getAvatar", method = RequestMethod.POST)
+    public Response<?> getUserAvatar(@Valid GetUserAvatarReq req) {
+        Utils.userLoginCheck(session);
+
+        Integer userId = (Integer) session.getAttribute(Consts.USER_ID);
+        String avatar = userService.getUserAvatar(userId);
+        GetUserAvatarRsp rsp = new GetUserAvatarRsp();
+        rsp.setAvatarImageName(avatar);
+        return Response.success(rsp);
+    }
+
+    @ApiOperation("修改用户头像")
+    @RequestMapping(value = "/modifyUserAvatar", method = RequestMethod.POST)
+    public Response<?> modifyUserAvatar(@Valid ModifyUserAvatarReq req) {
+        Utils.userLoginCheck(session);
+
+        String imageName = UUID.randomUUID().toString() + ".jpg";
+        Path imagePath = Path.of(props.getImgBasePath(), imageName);
+        MultipartFile file = req.getFile();
+        if (file == null) {
+            return Response.fail("没有图片被上传");
+        }
+        try {
+            file.transferTo(imagePath);
+        } catch (IOException e) {
+            logger.warn("无法存储上传的图片到本地", e);
+            return Response.fail("上传图片失败");
+        }
+        Integer userId = (Integer) session.getAttribute(Consts.USER_ID);
+        userService.modifyUserAvatar(userId, imageName);
+        ModifyUserAvatarRsp rsp = new ModifyUserAvatarRsp();
+        rsp.setImageName(imageName);
+        return Response.success(rsp);
     }
 
 

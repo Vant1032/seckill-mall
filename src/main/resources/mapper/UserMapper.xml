@@ -12,9 +12,10 @@
     <result column="status" jdbcType="BIT" property="status" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+    <result column="avatar_image_name" jdbcType="VARCHAR" property="avatarImageName"/>
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    user_id, user_name, `password`, sex, tel, `status`, created_time, updated_time
+    user_id, user_name, `password`, sex, tel, `status`, created_time, updated_time,avatar_image_name
   </sql>
 </mapper>

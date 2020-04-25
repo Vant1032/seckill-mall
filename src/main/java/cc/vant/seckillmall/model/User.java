@@ -41,6 +41,9 @@ public class User {
     @TableField(value = "status")
     private Boolean status;
 
+    @TableField(value = "avatar_image_name")
+    private String avatarImageName;
+
     @TableField(value = "created_time")
     private Date createdTime;
 

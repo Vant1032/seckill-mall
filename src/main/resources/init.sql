@@ -14,6 +14,7 @@ create table user
     sex          bit         not null default 1 comment '1代表男,0代表女',
     tel          varchar(20) comment '手机号',
     status       bit         not null default 1 comment '0 禁用，1有效',
+    avatar_image_name varchar(100) not null default 'defaultAvatar.jpg' comment '用户头像图片名称',
     created_time datetime    not null default current_timestamp,
     updated_time datetime    not null default current_timestamp on update current_timestamp,
     unique key `uni_user_name` (user_name) using btree

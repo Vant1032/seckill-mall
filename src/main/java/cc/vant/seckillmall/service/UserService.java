@@ -125,4 +125,16 @@ public class UserService {
         receiveAddress.setAddrId(addrId);
         receiveAddressMapper.delete(new QueryWrapper<>(receiveAddress));
     }
+
+    public String getUserAvatar(Integer userId) {
+        User user = userMapper.selectById(userId);
+        return user.getAvatarImageName();
+    }
+
+    public void modifyUserAvatar(Integer userId, String imageName) {
+        User entity = new User();
+        entity.setUserId(userId);
+        entity.setAvatarImageName(imageName);
+        userMapper.updateById(entity);
+    }
 }
