@@ -35,13 +35,14 @@ public class UserService {
         return userMapper.selectOne(Wrappers.query(entity));
     }
 
-    public void userSignIn(UserSignInReq req) {
+    public Integer userSignIn(UserSignInReq req) {
         User entity = new User();
         entity.setUserName(req.getUserName());
         entity.setPassword(req.getPassword());
         entity.setSex(req.getSex());
         entity.setTel(req.getTel());
         userMapper.insert(entity);
+        return entity.getUserId();
     }
 
     /**

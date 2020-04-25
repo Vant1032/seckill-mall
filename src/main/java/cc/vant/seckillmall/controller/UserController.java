@@ -71,8 +71,9 @@ public class UserController extends BaseController {
         if (userService.isNameExist(req.getUserName())) {
             return Response.fail("名字已存在");
         }
-        userService.userSignIn(req);
+        Integer userId = userService.userSignIn(req);
         session.setAttribute(Consts.IS_USER_LOGIN, true);
+        session.setAttribute(Consts.USER_ID, userId);
         return Response.success();
     }
 
