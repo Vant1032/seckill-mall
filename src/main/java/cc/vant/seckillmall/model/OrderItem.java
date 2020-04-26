@@ -9,8 +9,8 @@ import lombok.Data;
 import java.util.Date;
 
 /**
-    * 订单条目表
-    */
+ * 订单条目表
+ */
 @Data
 @TableName(value = "order_item")
 public class OrderItem {
