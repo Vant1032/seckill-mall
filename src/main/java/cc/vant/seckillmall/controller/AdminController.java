@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,7 +41,7 @@ public class AdminController extends BaseController {
 
     @ApiOperation("商家登录")
     @RequestMapping(value = "/admin/login", method = RequestMethod.POST)
-    public Response<?> adminLogin(@Valid AdminLoginReq req) {
+    public Response<?> adminLogin(@Valid @RequestBody AdminLoginReq req) {
 
         if (adminService.isLogin(req)) {
             // 设置session中isLogin为true
@@ -69,7 +70,7 @@ public class AdminController extends BaseController {
 
     @ApiOperation("商家创建秒杀商品")
     @RequestMapping(value = "/admin/createGoods", method = RequestMethod.POST)
-    public Response<?> createGoods(@Valid CreateGoodsReq req) {
+    public Response<?> createGoods(@Valid @RequestBody CreateGoodsReq req) {
         Utils.adminLoginCheck(session);
 
         int goodsId = adminService.createGoods(req);
@@ -81,7 +82,7 @@ public class AdminController extends BaseController {
 
     @ApiOperation("商家根据goodId删除商品")
     @RequestMapping(value = "/admin/deleteGoods", method = RequestMethod.POST)
-    public Response<?> deleteGoods(@Valid DeleteGoodsReq req) {
+    public Response<?> deleteGoods(@Valid @RequestBody DeleteGoodsReq req) {
         Utils.adminLoginCheck(session);
 
         adminService.deleteGoods(req);
@@ -90,7 +91,7 @@ public class AdminController extends BaseController {
 
     @ApiOperation("商家修改商品")
     @RequestMapping(value = "/admin/modifyGoods", method = RequestMethod.POST)
-    public Response<?> modifyGoods(@Valid ModifyGoodsReq req) {
+    public Response<?> modifyGoods(@Valid @RequestBody ModifyGoodsReq req) {
         Utils.adminLoginCheck(session);
 
         adminService.modifyGoods(req);
@@ -108,7 +109,7 @@ public class AdminController extends BaseController {
 
     @ApiOperation("上传图片")
     @RequestMapping(value = "/admin/uploadImg", method = RequestMethod.POST)
-    public Response<?> uploadImage(@Valid UploadImageReq req) {
+    public Response<?> uploadImage(@Valid @RequestBody UploadImageReq req) {
         Utils.adminLoginCheck(session);
 
         String imageName = UUID.randomUUID().toString() + ".jpg";

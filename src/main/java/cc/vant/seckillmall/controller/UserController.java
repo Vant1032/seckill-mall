@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,7 +41,7 @@ public class UserController extends BaseController {
 
     @ApiOperation("用户登录")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Response<?> userLogin(@Valid UserLoginReq req) {
+    public Response<?> userLogin(@Valid @RequestBody UserLoginReq req) {
         User user = userService.getUserByUserName(req.getUserName());
         if (user != null && req.getUserName().equals(user.getUserName()) && req.getPassword().equals(user.getPassword())) {
             session.setAttribute(Consts.USER_ID, user.getUserId());
@@ -67,7 +68,7 @@ public class UserController extends BaseController {
 
     @ApiOperation("用户注册")
     @RequestMapping(value = "/signIn", method = RequestMethod.POST)
-    public Response<?> userSignIn(@Valid UserSignInReq req) {
+    public Response<?> userSignIn(@Valid @RequestBody UserSignInReq req) {
         if (userService.isNameExist(req.getUserName())) {
             return Response.fail("名字已存在");
         }
@@ -79,7 +80,7 @@ public class UserController extends BaseController {
 
     @ApiOperation("修改密码")
     @RequestMapping(value = "/changePassword", method = RequestMethod.POST)
-    public Response<?> userChangePassword(@Valid UserChangePasswordReq req) {
+    public Response<?> userChangePassword(@Valid @RequestBody UserChangePasswordReq req) {
         Utils.userLoginCheck(session);
 
         return userService.userChangePassword(req);
@@ -87,7 +88,7 @@ public class UserController extends BaseController {
 
     @ApiOperation("修改用户信息")
     @RequestMapping(value = "/changeUserInfo", method = RequestMethod.POST)
-    public Response<?> changeUserInfo(@Valid ChangeUserInfoReq req) {
+    public Response<?> changeUserInfo(@Valid @RequestBody ChangeUserInfoReq req) {
         Utils.userLoginCheck(session);
 
 
@@ -97,7 +98,7 @@ public class UserController extends BaseController {
 
     @ApiOperation("获取用户头像图片名")
     @RequestMapping(value = "/getAvatar", method = RequestMethod.POST)
-    public Response<?> getUserAvatar(@Valid GetUserAvatarReq req) {
+    public Response<?> getUserAvatar(@Valid @RequestBody GetUserAvatarReq req) {
         Utils.userLoginCheck(session);
 
         Integer userId = (Integer) session.getAttribute(Consts.USER_ID);
@@ -109,7 +110,7 @@ public class UserController extends BaseController {
 
     @ApiOperation("修改用户头像")
     @RequestMapping(value = "/modifyUserAvatar", method = RequestMethod.POST)
-    public Response<?> modifyUserAvatar(@Valid ModifyUserAvatarReq req) {
+    public Response<?> modifyUserAvatar(@Valid @RequestBody ModifyUserAvatarReq req) {
         Utils.userLoginCheck(session);
 
         String imageName = UUID.randomUUID().toString() + ".jpg";
@@ -134,7 +135,7 @@ public class UserController extends BaseController {
 
     @ApiOperation(value = "查看收藏夹", notes = "会分页")
     @RequestMapping(value = "/viewFavorites", method = RequestMethod.GET)
-    public Response<?> viewFavorites(@Valid ViewFavoritesReq req) {
+    public Response<?> viewFavorites(@Valid @RequestBody ViewFavoritesReq req) {
         Utils.userLoginCheck(session);
 
         ViewFavoritesRsp rsp = userService.viewFavorites(req);
@@ -144,7 +145,7 @@ public class UserController extends BaseController {
 
     @ApiOperation("添加商品到收藏夹")
     @RequestMapping(value = "/addToFavorites", method = RequestMethod.POST)
-    public Response<?> addToFavorites(@Valid AddToFavoritesReq req) {
+    public Response<?> addToFavorites(@Valid @RequestBody AddToFavoritesReq req) {
         Utils.userLoginCheck(session);
 
         // 检查是否已存在
@@ -157,7 +158,7 @@ public class UserController extends BaseController {
 
     @ApiOperation("删除收藏夹中的商品")
     @RequestMapping(value = "/deleteFavorites", method = RequestMethod.POST)
-    public Response<?> deleteFavorites(@Valid DeleteFavoritesReq req) {
+    public Response<?> deleteFavorites(@Valid @RequestBody DeleteFavoritesReq req) {
         Utils.userLoginCheck(session);
 
         if (!userService.isFavoritesIdExist(req.getFavId())) {
@@ -169,7 +170,7 @@ public class UserController extends BaseController {
 
     @ApiOperation("买家增加收货地址")
     @RequestMapping(value = "/createReceiveAddress", method = RequestMethod.POST)
-    public Response<?> createReceiveAddress(@Valid CreateReceiveAddressReq req) {
+    public Response<?> createReceiveAddress(@Valid @RequestBody CreateReceiveAddressReq req) {
         Utils.userLoginCheck(session);
 
         Integer userId = (Integer) session.getAttribute(Consts.USER_ID);
@@ -180,7 +181,7 @@ public class UserController extends BaseController {
 
     @ApiOperation("查找买家所有的收货地址")
     @RequestMapping(value = "/getAllReceiveAddress", method = RequestMethod.POST)
-    public Response<?> getAllReceiveAddress(@Valid GetAllReceiveAddressReq req) {
+    public Response<?> getAllReceiveAddress(@Valid @RequestBody GetAllReceiveAddressReq req) {
         Utils.userLoginCheck(session);
 
         Integer userId = (Integer) session.getAttribute(Consts.USER_ID);
@@ -189,7 +190,7 @@ public class UserController extends BaseController {
 
     @ApiOperation("买家删除收货地址")
     @RequestMapping(value = "/deleteReceiveAddress", method = RequestMethod.POST)
-    public Response<?> deleteReceiveAddress(@Valid DeleteReceiveAddressReq req) {
+    public Response<?> deleteReceiveAddress(@Valid @RequestBody DeleteReceiveAddressReq req) {
         Utils.userLoginCheck(session);
 
         Integer userId = (Integer) session.getAttribute(Consts.USER_ID);

@@ -3,6 +3,7 @@ package cc.vant.seckillmall.pojo.order.req;
 import lombok.Data;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -12,6 +13,7 @@ public class CreateOrderReq {
     @Min(0L)
     private Integer addrId;
 
+    @NotEmpty
     private List<Inner> orders;
 
     @Data

@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +27,7 @@ public class GoodsController extends BaseController {
 
     @ApiOperation("获取某段时间内的秒杀商品")
     @RequestMapping(value = "/getGoodsList", method = RequestMethod.POST)
-    public Response<?> getGoodsList(@Valid GetGoodsListReq req) {
+    public Response<?> getGoodsList(@Valid @RequestBody GetGoodsListReq req) {
         Page<Goods> page = goodsService.getGoodsListPage(req);
         GetGoodsListRsp rsp = new GetGoodsListRsp();
         rsp.setGoodsList(page.getRecords());
@@ -36,7 +37,7 @@ public class GoodsController extends BaseController {
 
     @ApiOperation("通过goodID获取秒杀商品")
     @RequestMapping(value = "/getGoodsById", method = RequestMethod.POST)
-    public Response<?> getGoodsById(@Valid GetGoodsByIdReq req) {
+    public Response<?> getGoodsById(@Valid @RequestBody GetGoodsByIdReq req) {
         Goods goods = goodsService.getGoodsById(req.getGoodsId());
         if (goods == null) {
             return Response.fail("相应商品不存在");

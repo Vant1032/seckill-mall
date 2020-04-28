@@ -8,6 +8,7 @@ import cc.vant.seckillmall.util.Response;
 import cc.vant.seckillmall.util.Utils;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,7 +24,7 @@ public class OrderController extends BaseController {
 
     @ApiOperation("创建订单")
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public Response<?> createOrder(@Valid CreateOrderReq req) {
+    public Response<?> createOrder(@Valid @RequestBody CreateOrderReq req) {
         Utils.userLoginCheck(session);
 
         Integer userId = (Integer) session.getAttribute(Consts.USER_ID);
