@@ -83,7 +83,8 @@ public class UserController extends BaseController {
     public Response<?> userChangePassword(@Valid @RequestBody UserChangePasswordReq req) {
         Utils.userLoginCheck(session);
 
-        return userService.userChangePassword(req);
+        Integer userId = Utils.getUserId(session);
+        return userService.userChangePassword(userId, req.getOldPassword(), req.getNewPassword());
     }
 
     @ApiOperation("修改用户信息")
@@ -101,7 +102,7 @@ public class UserController extends BaseController {
     public Response<?> getUserAvatar(@Valid @RequestBody GetUserAvatarReq req) {
         Utils.userLoginCheck(session);
 
-        Integer userId = (Integer) session.getAttribute(Consts.USER_ID);
+        Integer userId = Utils.getUserId(session);
         String avatar = userService.getUserAvatar(userId);
         GetUserAvatarRsp rsp = new GetUserAvatarRsp();
         rsp.setAvatarImageName(avatar);
@@ -125,7 +126,7 @@ public class UserController extends BaseController {
             logger.warn("无法存储上传的图片到本地", e);
             return Response.fail("上传图片失败");
         }
-        Integer userId = (Integer) session.getAttribute(Consts.USER_ID);
+        Integer userId = Utils.getUserId(session);
         userService.modifyUserAvatar(userId, imageName);
         ModifyUserAvatarRsp rsp = new ModifyUserAvatarRsp();
         rsp.setImageName(imageName);
@@ -173,7 +174,7 @@ public class UserController extends BaseController {
     public Response<?> createReceiveAddress(@Valid @RequestBody CreateReceiveAddressReq req) {
         Utils.userLoginCheck(session);
 
-        Integer userId = (Integer) session.getAttribute(Consts.USER_ID);
+        Integer userId = Utils.getUserId(session);
         userService.createReceiveAddress(req, userId);
 
         return Response.success();
@@ -184,7 +185,7 @@ public class UserController extends BaseController {
     public Response<?> getAllReceiveAddress(@Valid @RequestBody GetAllReceiveAddressReq req) {
         Utils.userLoginCheck(session);
 
-        Integer userId = (Integer) session.getAttribute(Consts.USER_ID);
+        Integer userId = Utils.getUserId(session);
         return Response.success(userService.getAllReceiveAddress(userId));
     }
 
@@ -193,7 +194,7 @@ public class UserController extends BaseController {
     public Response<?> deleteReceiveAddress(@Valid @RequestBody DeleteReceiveAddressReq req) {
         Utils.userLoginCheck(session);
 
-        Integer userId = (Integer) session.getAttribute(Consts.USER_ID);
+        Integer userId = Utils.getUserId(session);
         userService.deleteReceiveAddress(userId, req.getAddrId());
         return Response.success();
     }

@@ -89,15 +89,15 @@ public class UserService {
         favoritesMapper.deleteById(req.getFavId());
     }
 
-    public Response<?> userChangePassword(UserChangePasswordReq req) {
-        User user = userMapper.selectById(req.getUserId());
+    public Response<?> userChangePassword(Integer userId, String oldPassword, String newPassword) {
+        User user = userMapper.selectById(userId);
         if (user == null) {
             return Response.fail("userId不合法");
         }
-        if (user.getPassword().equals(req.getOldPassword())) {
+        if (user.getPassword().equals(oldPassword)) {
             User entity = new User();
-            entity.setUserId(req.getUserId());
-            entity.setPassword(req.getNewPassword());
+            entity.setUserId(userId);
+            entity.setPassword(newPassword);
             userMapper.updateById(entity);
             return Response.success();
         }

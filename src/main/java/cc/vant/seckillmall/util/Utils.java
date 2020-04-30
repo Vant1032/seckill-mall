@@ -31,4 +31,8 @@ public abstract class Utils {
             throw new NotLoginException();
         }
     }
+
+    public static Integer getUserId(HttpSession session) {
+        return (Integer) session.getAttribute(Consts.USER_ID);
+    }
 }

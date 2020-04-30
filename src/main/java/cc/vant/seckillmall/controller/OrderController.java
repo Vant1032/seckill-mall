@@ -1,6 +1,5 @@
 package cc.vant.seckillmall.controller;
 
-import cc.vant.seckillmall.constants.Consts;
 import cc.vant.seckillmall.pojo.order.req.CreateOrderReq;
 import cc.vant.seckillmall.pojo.order.rsp.CreateOrderRsp;
 import cc.vant.seckillmall.service.OrderService;
@@ -27,7 +26,7 @@ public class OrderController extends BaseController {
     public Response<?> createOrder(@Valid @RequestBody CreateOrderReq req) {
         Utils.userLoginCheck(session);
 
-        Integer userId = (Integer) session.getAttribute(Consts.USER_ID);
+        Integer userId = Utils.getUserId(session);
         Integer orderId = orderService.createOrder(userId, req.getOrders(), req.getAddrId());
         CreateOrderRsp rsp = new CreateOrderRsp();
         rsp.setOrderId(orderId);
