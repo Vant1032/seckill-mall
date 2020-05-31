@@ -1,7 +1,10 @@
 package cc.vant.seckillmall.controller;
 
 import cc.vant.seckillmall.pojo.order.req.CreateOrderReq;
+import cc.vant.seckillmall.pojo.order.req.UserPayOrderReq;
+import cc.vant.seckillmall.pojo.order.req.UserShowAllOrderReq;
 import cc.vant.seckillmall.pojo.order.rsp.CreateOrderRsp;
+import cc.vant.seckillmall.pojo.order.rsp.UserShowAllOrderRsp;
 import cc.vant.seckillmall.service.OrderService;
 import cc.vant.seckillmall.util.Response;
 import cc.vant.seckillmall.util.Utils;
@@ -23,7 +26,7 @@ public class OrderController extends BaseController {
 
     @ApiOperation("创建订单")
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public Response<?> createOrder(@Valid @RequestBody CreateOrderReq req) {
+    public Response<CreateOrderRsp> createOrder(@Valid @RequestBody CreateOrderReq req) {
         Utils.userLoginCheck(session);
 
         Integer userId = Utils.getUserId(session);
@@ -31,5 +34,25 @@ public class OrderController extends BaseController {
         CreateOrderRsp rsp = new CreateOrderRsp();
         rsp.setOrderId(orderId);
         return Response.success(rsp);
+    }
+
+    @ApiOperation("用户查看所有订单")
+    @RequestMapping(value = "/userShowAllOrder", method = RequestMethod.POST)
+    public Response<UserShowAllOrderRsp> userShowAllOrder(@Valid @RequestBody UserShowAllOrderReq req) {
+        Utils.userLoginCheck(session);
+
+        Integer userId = Utils.getUserId(session);
+        UserShowAllOrderRsp rsp = orderService.userShowAllOrder(userId);
+        return Response.success(rsp);
+    }
+
+    @ApiOperation("用户付款订单")
+    @RequestMapping(value = "/userPayOrder", method = RequestMethod.POST)
+    public Response<?> userPayOrder(@Valid @RequestBody UserPayOrderReq req) {
+        Utils.userLoginCheck(session);
+
+        Integer userId = Utils.getUserId(session);
+        orderService.userPayOrder(userId, req.getOrderId());
+        return Response.success();
     }
 }

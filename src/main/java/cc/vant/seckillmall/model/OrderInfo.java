@@ -43,5 +43,6 @@ public class OrderInfo {
         WAIT_PAY,
         WAIT_SHIPPING,
         SHIPPED,
+        WAIT_SIGN,
     }
 }

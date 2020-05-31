@@ -111,7 +111,7 @@ public class UserController extends BaseController {
 
     @ApiOperation("修改用户头像")
     @RequestMapping(value = "/modifyUserAvatar", method = RequestMethod.POST)
-    public Response<?> modifyUserAvatar(@Valid @RequestBody ModifyUserAvatarReq req) {
+    public Response<?> modifyUserAvatar(@Valid ModifyUserAvatarReq req) {
         Utils.userLoginCheck(session);
 
         String imageName = UUID.randomUUID().toString() + ".jpg";

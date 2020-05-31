@@ -6,6 +6,11 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.util.Date;
+
+/**
+ * 商家账户表
+ */
 @Data
 @TableName(value = "admin_user")
 public class AdminUser {
@@ -23,4 +28,10 @@ public class AdminUser {
      */
     @TableField(value = "status")
     private Boolean status;
+
+    @TableField(value = "created_time")
+    private Date createdTime;
+
+    @TableField(value = "updated_time")
+    private Date updatedTime;
 }

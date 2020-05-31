@@ -15,4 +15,13 @@
     <!--@mbg.generated-->
     order_item_id, order_id, goods_id, amount, created_time, updated_time
   </sql>
+  <select id="userShowAllOrder" resultType="cc.vant.seckillmall.pojo.order.model.UserOrder">
+  select
+  g.goods_name as goodsName,
+  g.price,
+  oi.amount,
+  oi.order_item_id as orderItemId
+  from order_item oi inner join goods g on oi.goods_id = g.goods_id
+  where oi.order_id = #{orderId,jdbcType=INTEGER}
+  </select>
 </mapper>

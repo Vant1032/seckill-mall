@@ -71,7 +71,7 @@ create table order_info
     order_id     int primary key auto_increment,
     user_id      int      not null,
     addr_id      int      not null,
-    status       enum('CANCEL', 'WAIT_PAY', 'WAIT_SHIPPING', 'SHIPPED')  not null comment 'CANCEL代表订单已被取消，WAIT_PAY代表待付款，WAIT_SHIPPING代表待发货，SHIPPED代表已收货',
+    status       enum ('CANCEL', 'WAIT_PAY', 'WAIT_SHIPPING', 'SHIPPED', 'WAIT_SIGN') not null comment 'CANCEL代表订单已被取消，WAIT_PAY代表待付款，WAIT_SHIPPING代表待发货，SHIPPED代表已收货，WAIT_SIGN代表待签收',
     created_time datetime not null default current_timestamp,
     updated_time datetime not null default current_timestamp on update current_timestamp,
     key `idx_user_id` (user_id) using btree

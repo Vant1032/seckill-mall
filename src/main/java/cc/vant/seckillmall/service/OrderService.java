@@ -4,10 +4,15 @@ import cc.vant.seckillmall.mapper.OrderInfoMapper;
 import cc.vant.seckillmall.mapper.OrderItemMapper;
 import cc.vant.seckillmall.model.OrderInfo;
 import cc.vant.seckillmall.model.OrderItem;
+import cc.vant.seckillmall.pojo.order.model.UserOrder;
 import cc.vant.seckillmall.pojo.order.req.CreateOrderReq;
+import cc.vant.seckillmall.pojo.order.rsp.UserShowAllOrderRsp;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,5 +39,66 @@ public class OrderService {
             orderItemMapper.insert(orderItem);
         }
         return orderId;
+    }
+
+    public UserShowAllOrderRsp userShowAllOrder(Integer userId) {
+        OrderInfo orderInfo = new OrderInfo();
+        orderInfo.setUserId(userId);
+        List<OrderInfo> orderInfos = orderInfoMapper.selectList(new QueryWrapper<>(orderInfo));
+
+        List<UserShowAllOrderRsp.UserOrderInfo> userOrderInfos = new ArrayList<>();
+        for (OrderInfo info : orderInfos) {
+            // 目前是只能查出一个订单条目
+            List<UserOrder> userOrders = orderItemMapper.userShowAllOrder(info.getOrderId());
+            UserShowAllOrderRsp.UserOrderInfo order = new UserShowAllOrderRsp.UserOrderInfo();
+            order.setStatus(info.getStatus());
+            order.setOrderId(info.getOrderId());
+            order.setUserOrders(userOrders);
+            userOrderInfos.add(order);
+        }
+
+        UserShowAllOrderRsp rsp = new UserShowAllOrderRsp();
+        rsp.setUserOrderInfos(userOrderInfos);
+
+        return rsp;
+    }
+
+    public UserShowAllOrderRsp showOrder(String status) {
+        OrderInfo orderInfo = new OrderInfo();
+        orderInfo.setStatus(status);
+        List<OrderInfo> orderInfos = orderInfoMapper.selectList(new QueryWrapper<>(orderInfo));
+
+        List<UserShowAllOrderRsp.UserOrderInfo> userOrderInfos = new ArrayList<>();
+        for (OrderInfo info : orderInfos) {
+            // 目前是只能查出一个订单条目
+            List<UserOrder> userOrders = orderItemMapper.userShowAllOrder(info.getOrderId());
+            UserShowAllOrderRsp.UserOrderInfo order = new UserShowAllOrderRsp.UserOrderInfo();
+            order.setStatus(info.getStatus());
+            order.setOrderId(info.getOrderId());
+            order.setUserOrders(userOrders);
+            userOrderInfos.add(order);
+        }
+
+        UserShowAllOrderRsp rsp = new UserShowAllOrderRsp();
+        rsp.setUserOrderInfos(userOrderInfos);
+
+        return rsp;
+    }
+
+    public void userPayOrder(Integer userId, Integer orderId) {
+        OrderInfo entity = new OrderInfo();
+        entity.setUserId(userId);
+        entity.setOrderId(orderId);
+        OrderInfo orderInfo = new OrderInfo();
+        orderInfo.setStatus(OrderInfo.Status.WAIT_SHIPPING.name());
+        orderInfoMapper.update(orderInfo, new UpdateWrapper<>(entity));
+    }
+
+    public void deliverGoods(Integer orderId) {
+        OrderInfo entity = new OrderInfo();
+        entity.setOrderId(orderId);
+        OrderInfo orderInfo = new OrderInfo();
+        orderInfo.setStatus(OrderInfo.Status.WAIT_SIGN.name());
+        orderInfoMapper.update(orderInfo, new UpdateWrapper<>(entity));
     }
 }

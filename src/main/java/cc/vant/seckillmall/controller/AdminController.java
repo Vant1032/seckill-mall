@@ -6,7 +6,9 @@ import cc.vant.seckillmall.model.Goods;
 import cc.vant.seckillmall.pojo.admin.req.*;
 import cc.vant.seckillmall.pojo.admin.rsp.CreateGoodsRsp;
 import cc.vant.seckillmall.pojo.admin.rsp.UploadImageRsp;
+import cc.vant.seckillmall.pojo.order.rsp.UserShowAllOrderRsp;
 import cc.vant.seckillmall.service.AdminService;
+import cc.vant.seckillmall.service.OrderService;
 import cc.vant.seckillmall.util.Response;
 import cc.vant.seckillmall.util.Utils;
 import io.swagger.annotations.Api;
@@ -38,6 +40,9 @@ public class AdminController extends BaseController {
 
     @Autowired
     private Props props;
+
+    @Autowired
+    private OrderService orderService;
 
     @ApiOperation("商家登录")
     @RequestMapping(value = "/admin/login", method = RequestMethod.POST)
@@ -127,5 +132,23 @@ public class AdminController extends BaseController {
         UploadImageRsp rsp = new UploadImageRsp();
         rsp.setImageName(imageName);
         return Response.success(rsp);
+    }
+
+    @ApiOperation("商家查看订单")
+    @RequestMapping(value = "/admin/showOrder", method = RequestMethod.POST)
+    public Response<UserShowAllOrderRsp> showWaitShippingOrder(@Valid @RequestBody ShowWaitShippingOrderReq req) {
+        Utils.adminLoginCheck(session);
+
+        UserShowAllOrderRsp rsp = orderService.showOrder(req.getStatus());
+        return Response.success(rsp);
+    }
+
+    @ApiOperation("商家发货订单")
+    @RequestMapping(value = "/admin/deliverGoods", method = RequestMethod.POST)
+    public Response<?> deliverGoods(@Valid @RequestBody DeliverGoodsReq req) {
+        Utils.adminLoginCheck(session);
+
+        orderService.deliverGoods(req.getOrderId());
+        return Response.success();
     }
 }
