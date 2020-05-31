@@ -26,15 +26,15 @@ public class Response<T> {
         return new Response<>(0, data, msg);
     }
 
-    public static Response<?> fail() {
+    public static <T> Response<T> fail() {
         return new Response<>(1, null, "");
     }
 
-    public static Response<?> fail(String msg) {
+    public static <T> Response<T> fail(String msg) {
         return new Response<>(1, null, msg);
     }
 
-    public static Response<?> fail(ErrorCode errorCode) {
+    public static <T> Response<T> fail(ErrorCode errorCode) {
         return new Response<>(errorCode.getCode(), null, errorCode.getMsg());
     }
 }

@@ -1,7 +1,9 @@
 package cc.vant.seckillmall.service;
 
+import cc.vant.seckillmall.mapper.GoodsMapper;
 import cc.vant.seckillmall.mapper.OrderInfoMapper;
 import cc.vant.seckillmall.mapper.OrderItemMapper;
+import cc.vant.seckillmall.model.Goods;
 import cc.vant.seckillmall.model.OrderInfo;
 import cc.vant.seckillmall.model.OrderItem;
 import cc.vant.seckillmall.pojo.order.model.UserOrder;
@@ -23,7 +25,24 @@ public class OrderService {
     @Autowired
     private OrderItemMapper orderItemMapper;
 
+    @Autowired
+    private GoodsMapper goodsMapper;
+
     public Integer createOrder(Integer userId, List<CreateOrderReq.Inner> orders, Integer addrId) {
+        for (CreateOrderReq.Inner order : orders) {
+            // 检查库存
+            Goods goods = goodsMapper.selectById(order.getGoodsId());
+            if (goods.getAmount() >= order.getAmount()) {
+                Goods entity = new Goods();
+                entity.setGoodsId(order.getGoodsId());
+                entity.setAmount(goods.getAmount() - order.getAmount());
+                goodsMapper.updateById(entity);
+            } else {
+                return -1;
+            }
+        }
+
+
         OrderInfo orderInfo = new OrderInfo();
         orderInfo.setUserId(userId);
         orderInfo.setStatus(OrderInfo.Status.WAIT_PAY.name());

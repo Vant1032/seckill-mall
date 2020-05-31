@@ -31,6 +31,10 @@ public class OrderController extends BaseController {
 
         Integer userId = Utils.getUserId(session);
         Integer orderId = orderService.createOrder(userId, req.getOrders(), req.getAddrId());
+        if (orderId == -1) {
+            return Response.fail("库存不足");
+        }
+
         CreateOrderRsp rsp = new CreateOrderRsp();
         rsp.setOrderId(orderId);
         return Response.success(rsp);
