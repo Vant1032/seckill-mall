@@ -8,13 +8,16 @@ import cc.vant.seckillmall.model.OrderInfo;
 import cc.vant.seckillmall.model.OrderItem;
 import cc.vant.seckillmall.pojo.order.model.UserOrder;
 import cc.vant.seckillmall.pojo.order.req.CreateOrderReq;
+import cc.vant.seckillmall.pojo.order.rsp.CreateOrderRsp;
 import cc.vant.seckillmall.pojo.order.rsp.UserShowAllOrderRsp;
+import cc.vant.seckillmall.util.Response;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -28,20 +31,22 @@ public class OrderService {
     @Autowired
     private GoodsMapper goodsMapper;
 
-    public Integer createOrder(Integer userId, List<CreateOrderReq.Inner> orders, Integer addrId) {
+    public Response<CreateOrderRsp> createOrder(Integer userId, List<CreateOrderReq.Inner> orders, Integer addrId) {
         for (CreateOrderReq.Inner order : orders) {
             // 检查库存
             Goods goods = goodsMapper.selectById(order.getGoodsId());
+            if (goods.getSeckillTime().after(new Date())) {
+                return Response.fail("未到秒杀时间");
+            }
             if (goods.getAmount() >= order.getAmount()) {
                 Goods entity = new Goods();
                 entity.setGoodsId(order.getGoodsId());
                 entity.setAmount(goods.getAmount() - order.getAmount());
                 goodsMapper.updateById(entity);
             } else {
-                return -1;
+                return Response.fail("库存不足");
             }
         }
-
 
         OrderInfo orderInfo = new OrderInfo();
         orderInfo.setUserId(userId);
@@ -57,7 +62,11 @@ public class OrderService {
             orderItem.setAmount(order.getAmount());
             orderItemMapper.insert(orderItem);
         }
-        return orderId;
+
+        CreateOrderRsp rsp = new CreateOrderRsp();
+        rsp.setOrderId(orderId);
+
+        return Response.success(rsp);
     }
 
     public UserShowAllOrderRsp userShowAllOrder(Integer userId) {

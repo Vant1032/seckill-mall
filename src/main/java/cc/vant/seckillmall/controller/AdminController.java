@@ -114,7 +114,7 @@ public class AdminController extends BaseController {
 
     @ApiOperation("上传图片")
     @RequestMapping(value = "/admin/uploadImg", method = RequestMethod.POST)
-    public Response<?> uploadImage(@Valid @RequestBody UploadImageReq req) {
+    public Response<?> uploadImage(@Valid UploadImageReq req) {
         Utils.adminLoginCheck(session);
 
         String imageName = UUID.randomUUID().toString() + ".jpg";
