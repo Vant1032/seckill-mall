@@ -2,6 +2,7 @@ package cc.vant.seckillmall.controller;
 
 import cc.vant.seckillmall.constants.Consts;
 import cc.vant.seckillmall.constants.Props;
+import cc.vant.seckillmall.model.ReceiveAddress;
 import cc.vant.seckillmall.model.User;
 import cc.vant.seckillmall.pojo.user.req.*;
 import cc.vant.seckillmall.pojo.user.rsp.GetUserAvatarRsp;
@@ -24,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -99,7 +101,7 @@ public class UserController extends BaseController {
 
     @ApiOperation("获取用户头像图片名")
     @RequestMapping(value = "/getAvatar", method = RequestMethod.POST)
-    public Response<?> getUserAvatar(@Valid @RequestBody GetUserAvatarReq req) {
+    public Response<GetUserAvatarRsp> getUserAvatar(@Valid @RequestBody GetUserAvatarReq req) {
         Utils.userLoginCheck(session);
 
         Integer userId = Utils.getUserId(session);
@@ -111,7 +113,7 @@ public class UserController extends BaseController {
 
     @ApiOperation("修改用户头像")
     @RequestMapping(value = "/modifyUserAvatar", method = RequestMethod.POST)
-    public Response<?> modifyUserAvatar(@Valid ModifyUserAvatarReq req) {
+    public Response<ModifyUserAvatarRsp> modifyUserAvatar(@Valid ModifyUserAvatarReq req) {
         Utils.userLoginCheck(session);
 
         String imageName = UUID.randomUUID().toString() + ".jpg";
@@ -136,7 +138,7 @@ public class UserController extends BaseController {
 
     @ApiOperation(value = "查看收藏夹", notes = "会分页")
     @RequestMapping(value = "/viewFavorites", method = RequestMethod.GET)
-    public Response<?> viewFavorites(@Valid @RequestBody ViewFavoritesReq req) {
+    public Response<ViewFavoritesRsp> viewFavorites(@Valid @RequestBody ViewFavoritesReq req) {
         Utils.userLoginCheck(session);
 
         ViewFavoritesRsp rsp = userService.viewFavorites(req);
@@ -182,7 +184,7 @@ public class UserController extends BaseController {
 
     @ApiOperation("查找买家所有的收货地址")
     @RequestMapping(value = "/getAllReceiveAddress", method = RequestMethod.POST)
-    public Response<?> getAllReceiveAddress(@Valid @RequestBody GetAllReceiveAddressReq req) {
+    public Response<List<ReceiveAddress>> getAllReceiveAddress(@Valid @RequestBody GetAllReceiveAddressReq req) {
         Utils.userLoginCheck(session);
 
         Integer userId = Utils.getUserId(session);

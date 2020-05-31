@@ -27,7 +27,7 @@ public class GoodsController extends BaseController {
 
     @ApiOperation("获取某段时间内的秒杀商品")
     @RequestMapping(value = "/getGoodsList", method = RequestMethod.POST)
-    public Response<?> getGoodsList(@Valid @RequestBody GetGoodsListReq req) {
+    public Response<GetGoodsListRsp> getGoodsList(@Valid @RequestBody GetGoodsListReq req) {
         Page<Goods> page = goodsService.getGoodsListPage(req);
         GetGoodsListRsp rsp = new GetGoodsListRsp();
         rsp.setGoodsList(page.getRecords());
@@ -37,7 +37,7 @@ public class GoodsController extends BaseController {
 
     @ApiOperation("通过goodID获取秒杀商品")
     @RequestMapping(value = "/getGoodsById", method = RequestMethod.POST)
-    public Response<?> getGoodsById(@Valid @RequestBody GetGoodsByIdReq req) {
+    public Response<Goods> getGoodsById(@Valid @RequestBody GetGoodsByIdReq req) {
         Goods goods = goodsService.getGoodsById(req.getGoodsId());
         if (goods == null) {
             return Response.fail("相应商品不存在");

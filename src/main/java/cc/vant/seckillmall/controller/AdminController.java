@@ -75,7 +75,7 @@ public class AdminController extends BaseController {
 
     @ApiOperation("商家创建秒杀商品")
     @RequestMapping(value = "/admin/createGoods", method = RequestMethod.POST)
-    public Response<?> createGoods(@Valid @RequestBody CreateGoodsReq req) {
+    public Response<CreateGoodsRsp> createGoods(@Valid @RequestBody CreateGoodsReq req) {
         Utils.adminLoginCheck(session);
 
         int goodsId = adminService.createGoods(req);
@@ -105,7 +105,7 @@ public class AdminController extends BaseController {
 
     @ApiOperation("商家查看所有已创建的商品")
     @RequestMapping(value = "/admin/getAllGoods", method = RequestMethod.POST)
-    public Response<?> getAllGoods() {
+    public Response<List<Goods>> getAllGoods() {
         Utils.adminLoginCheck(session);
 
         List<Goods> allGoods = adminService.getAllGoods();
@@ -114,7 +114,7 @@ public class AdminController extends BaseController {
 
     @ApiOperation("上传图片")
     @RequestMapping(value = "/admin/uploadImg", method = RequestMethod.POST)
-    public Response<?> uploadImage(@Valid UploadImageReq req) {
+    public Response<UploadImageRsp> uploadImage(@Valid UploadImageReq req) {
         Utils.adminLoginCheck(session);
 
         String imageName = UUID.randomUUID().toString() + ".jpg";
